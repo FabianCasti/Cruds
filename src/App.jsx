@@ -8,22 +8,64 @@ import {
   DialogTitle,
   TextField,
 } from "@mui/material";
-import { Box } from "@mui/system";
 
 function Formulario(Props) {
   function handleClickClose() {
     Props.onClose();
+  }
+
+  const [Usuario, changeUsser] = useState({
+    Estado: "",
+    Usuario: "",
+    Email: "",
+    Tipo: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    changeUsser((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  function AggUser() {
+    Props.Agguser(Usuario);
   }
   return (
     <Dialog open={Props.open}>
       <DialogTitle>Datos Personales</DialogTitle>
 
       <DialogContent>
-        <TextField label="Estado" variant="standard" />
-        <TextField label="Usuario" variant="standard" />
-        <TextField label="E-mail" variant="standard" />
-        <TextField label="Tipo" variant="standard" />
+        <TextField
+          name="Estado"
+          label="Estado"
+          variant="standard"
+          onChange={handleChange}
+        />
+        <TextField
+          name="Usuario"
+          label="Usuario"
+          variant="standard"
+          onChange={handleChange}
+        />
+        <TextField
+          name="Email"
+          label="Email"
+          variant="standard"
+          onChange={handleChange}
+        />
+        <TextField
+          name="Tipo"
+          label="Tipo"
+          variant="standard"
+          onChange={handleChange}
+        />
       </DialogContent>
+
+      <DialogActions>
+        <Button onClick={AggUser}>Agregar</Button>
+      </DialogActions>
 
       <DialogActions>
         <Button onClick={handleClickClose}>Cerrar</Button>
@@ -39,16 +81,8 @@ function App() {
   const handleClickOpen = () => {
     setOpen(true);
   };
-  const addElement = () => {
-    setArreglo([
-      ...arreglo,
-      {
-        estado: "Activo",
-        Nombre: "Fabian",
-        Email: "fdad@gmail.com",
-        Tipo: "admin",
-      },
-    ]);
+  const addElement = (User) => {
+    setArreglo([...arreglo, User]);
   };
 
   function handleClickClose() {
@@ -73,8 +107,8 @@ function App() {
           {arreglo.map((item) => {
             return (
               <tr>
-                <td>{item.estado}</td>
-                <td>{item.Nombre}</td>
+                <td>{item.Estado}</td>
+                <td>{item.Usuario}</td>
                 <td>{item.Email}</td>
                 <td>{item.Tipo}</td>
               </tr>
@@ -82,7 +116,11 @@ function App() {
           })}
         </tbody>
       </table>
-      <Formulario open={open} onClose={handleClickClose}></Formulario>
+      <Formulario
+        open={open}
+        onClose={handleClickClose}
+        Agguser={addElement}
+      ></Formulario>
     </div>
   );
 }
